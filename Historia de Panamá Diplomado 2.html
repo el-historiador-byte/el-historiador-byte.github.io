@@ -1,0 +1,1166 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoHistoria Panamá — Blog Educativo Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161922;
+    --bg3: #1e2330;
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --teal: #4ecdc4;
+    --coral: #e84855;
+    --cream: #f5f0e8;
+    --text: #ddd8ce;
+    --muted: #7a7568;
+    --border: rgba(201,168,76,0.18);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(15,17,23,0.88);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 8rem 4rem 4rem;
+  }
+
+  .hero-map {
+    position: absolute;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse 80% 60% at 70% 50%, rgba(78,205,196,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 20% 60%, rgba(201,168,76,0.05) 0%, transparent 50%);
+  }
+
+  /* Decorative Panama silhouette lines */
+  .hero-map::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      repeating-linear-gradient(135deg, transparent, transparent 48px, rgba(201,168,76,0.03) 48px, rgba(201,168,76,0.03) 49px);
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    max-width: 900px;
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    color: var(--teal);
+    text-transform: uppercase;
+    border: 1px solid rgba(78,205,196,0.3);
+    padding: 0.4rem 1.2rem;
+    border-radius: 2px;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 1.5rem;
+    animation: fadeUp 0.8s ease 0.15s both;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-subtitle {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 580px;
+    margin: 0 auto 3rem;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    background: var(--gold);
+    color: #0f1117;
+    padding: 0.9rem 2rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s, transform 0.2s;
+    animation: fadeUp 0.8s ease 0.45s both;
+  }
+
+  .hero-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 3rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: pulse 2s infinite;
+  }
+
+  .hero-scroll-line {
+    width: 1px;
+    height: 48px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+  }
+
+  /* ── SECTIONS ── */
+  .section {
+    padding: 7rem 4rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--gold);
+    letter-spacing: 0.2em;
+    margin-top: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+  }
+
+  .section-title span {
+    display: block;
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  /* Divider */
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: var(--border);
+    margin: 0 0 4rem;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+
+  .card {
+    background: var(--bg2);
+    padding: 2.5rem;
+    transition: background 0.3s;
+  }
+
+  .card:hover { background: var(--bg3); }
+
+  .card-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(201,168,76,0.1);
+    border: 1px solid var(--border);
+    display: grid;
+    place-items: center;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+
+  .card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    margin-bottom: 0.8rem;
+    color: var(--cream);
+  }
+
+  .card p {
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── FEATURE BLOCK ── */
+  .feature-block {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  @media (max-width: 768px) {
+    .feature-block { grid-template-columns: 1fr; }
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    .section { padding: 5rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 4rem; }
+  }
+
+  .feature-block p {
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+    font-size: 0.95rem;
+  }
+
+  .feature-block strong {
+    color: var(--cream);
+    font-weight: 500;
+  }
+
+  /* ── METHODOLOGY LIST ── */
+  .method-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .method-item {
+    background: var(--bg2);
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2rem;
+    padding: 2rem 2.5rem;
+    align-items: start;
+    transition: background 0.3s;
+  }
+
+  .method-item:hover { background: var(--bg3); }
+
+  .method-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+    border: 1px solid rgba(78,205,196,0.3);
+    white-space: nowrap;
+    margin-top: 0.2rem;
+  }
+
+  .method-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    color: var(--cream);
+  }
+
+  .method-content p {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── TIC TABLE ── */
+  .tic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  .tic-item {
+    background: var(--bg2);
+    padding: 2rem;
+    transition: background 0.3s;
+  }
+
+  .tic-item:hover { background: var(--bg3); }
+
+  .tic-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--gold);
+    margin-bottom: 0.4rem;
+  }
+
+  .tic-cat {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .tic-desc {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ── EVAL ITEMS ── */
+  .eval-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5px;
+    background: var(--border);
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 700px) { .eval-grid { grid-template-columns: 1fr; } }
+
+  .eval-item {
+    background: var(--bg2);
+    padding: 2.5rem;
+    transition: background 0.3s;
+  }
+
+  .eval-item:hover { background: var(--bg3); }
+
+  .eval-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--coral);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .eval-label::before {
+    content: '';
+    width: 18px;
+    height: 1px;
+    background: var(--coral);
+  }
+
+  .eval-item h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.7rem;
+    color: var(--cream);
+  }
+
+  .eval-item p {
+    font-size: 0.87rem;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* ── QUOTE ── */
+  blockquote.featured {
+    border-left: 3px solid var(--gold);
+    padding: 1.5rem 2rem;
+    background: var(--bg2);
+    margin: 3rem 0;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: var(--cream);
+    line-height: 1.55;
+  }
+
+  blockquote.featured cite {
+    display: block;
+    margin-top: 0.8rem;
+    font-family: 'DM Mono', monospace;
+    font-style: normal;
+    font-size: 0.68rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  /* ── INTERDISCIPLINARY ARCS ── */
+  .arc-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .arc-subject {
+    min-width: 140px;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+
+  .arc-arrow { color: var(--muted); font-size: 0.8rem; }
+
+  .arc-desc {
+    font-size: 0.88rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--gold);
+  }
+
+  .footer-info {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  /* ── BADGE ── */
+  .badge {
+    display: inline-block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.63rem;
+    letter-spacing: 0.12em;
+    color: var(--teal);
+    background: rgba(78,205,196,0.08);
+    border: 1px solid rgba(78,205,196,0.25);
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    margin: 0.2rem;
+    text-transform: uppercase;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Tags row */
+  .tags { margin-top: 1.5rem; }
+
+  /* Section bg alternating */
+  .section-alt {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-alt .section {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVIGATION -->
+<nav>
+  <div class="nav-logo">GeoHistoria · Panamá</div>
+  <ul class="nav-links">
+    <li><a href="#portada">Portada</a></li>
+    <li><a href="#contexto">Contexto</a></li>
+    <li><a href="#metodologias">Metodologías</a></li>
+    <li><a href="#tic">TIC</a></li>
+    <li><a href="#interdisciplinar">Interdisciplinar</a></li>
+    <li><a href="#evaluacion">Evaluación</a></li>
+    <li><a href="#referencias">Referencias</a></li>
+  </ul>
+</nav>
+
+<!-- PORTADA -->
+<section id="portada" style="min-height:100vh; display:grid; place-items:center; padding:8rem 4rem 4rem; position:relative; overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 70% at 50% 40%, rgba(201,168,76,0.07) 0%, transparent 65%);"></div>
+  <div style="position:absolute;inset:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 59px,rgba(201,168,76,0.04) 59px,rgba(201,168,76,0.04) 60px),repeating-linear-gradient(90deg,transparent,transparent 59px,rgba(201,168,76,0.04) 59px,rgba(201,168,76,0.04) 60px);"></div>
+
+  <div style="position:relative;max-width:780px;width:100%;border:1px solid var(--border);background:var(--bg2);padding:0;">
+
+    <!-- Top bar -->
+    <div style="background:var(--gold);padding:1rem 2.5rem;display:flex;align-items:center;gap:1rem;">
+      <span style="font-family:'DM Mono',monospace;font-size:0.7rem;letter-spacing:0.2em;text-transform:uppercase;color:#0f1117;font-weight:500;">República de Panamá · CEFOPEC</span>
+    </div>
+
+    <div style="padding:3.5rem 3rem;">
+
+      <!-- Escudo placeholder -->
+      <div style="text-align:center;margin-bottom:2.5rem;">
+        <div style="display:inline-block;width:80px;height:80px;border:2px solid var(--border);background:rgba(201,168,76,0.07);border-radius:50%;display:grid;place-items:center;font-size:2.2rem;margin:0 auto;">🦅</div>
+        <div style="margin-top:0.8rem;font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.25em;color:var(--muted);text-transform:uppercase;">Centro de Formación Profesional de Educación Continua</div>
+      </div>
+
+      <!-- Título -->
+      <div style="text-align:center;margin-bottom:3rem;padding-bottom:2.5rem;border-bottom:1px solid var(--border);">
+        <div style="font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.2em;color:var(--teal);text-transform:uppercase;margin-bottom:1rem;">Título del Trabajo</div>
+        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3.5vw,2.4rem);font-weight:900;line-height:1.15;color:var(--cream);">Blog Educativo del<br><em style="color:var(--gold);font-style:italic;">Proyecto Innovador</em></h1>
+      </div>
+
+      <!-- Info grid -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--border);">
+
+        <div style="background:var(--bg2);padding:1.5rem 2rem;border-right:none;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:0.4rem;">Nombre</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);">Jaime Ramírez</div>
+        </div>
+
+        <div style="background:var(--bg2);padding:1.5rem 2rem;margin-left:1px;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:0.4rem;">Docente</div>
+          <div style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--cream);">Mgter. Annie Pascual</div>
+        </div>
+
+        <div style="background:var(--bg2);padding:1.5rem 2rem;margin-top:1px;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:0.4rem;">Diplomado</div>
+          <div style="font-size:0.9rem;color:var(--text);line-height:1.4;">Historia y Geografía Digital:<br>Innovación con TIC</div>
+        </div>
+
+        <div style="background:var(--bg2);padding:1.5rem 2rem;margin-top:1px;margin-left:1px;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:0.4rem;">Código del Diplomado</div>
+          <div style="font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--gold);letter-spacing:0.1em;">DHGD – 01</div>
+        </div>
+
+        <div style="background:var(--bg2);padding:1.5rem 2rem;margin-top:1px;grid-column:span 2;">
+          <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;margin-bottom:0.4rem;">Fecha de Entrega</div>
+          <div style="font-size:0.9rem;color:var(--text);">15 de enero de 2026</div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Bottom bar -->
+    <div style="background:rgba(201,168,76,0.07);border-top:1px solid var(--border);padding:1rem 2.5rem;text-align:center;">
+      <span style="font-family:'DM Mono',monospace;font-size:0.63rem;letter-spacing:0.18em;color:var(--muted);text-transform:uppercase;">República de Panamá · 2026</span>
+    </div>
+
+  </div>
+
+  <!-- Scroll hint -->
+  <div style="position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:0.5rem;animation:pulse 2s infinite;">
+    <div style="width:1px;height:40px;background:linear-gradient(to bottom,var(--muted),transparent);"></div>
+    <span style="font-family:'DM Mono',monospace;font-size:0.62rem;letter-spacing:0.2em;color:var(--muted);text-transform:uppercase;">explorar</span>
+  </div>
+</section>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-map"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Blog Educativo Digital · Innovación Pedagógica</div>
+    <h1>Panamá: <em>Tierra,<br>Historia y Futuro</em></h1>
+    <p class="hero-subtitle">Un proyecto educativo innovador que integra Geografía e Historia de Panamá mediante metodologías activas, tecnología y pensamiento crítico.</p>
+    <a href="#contexto" class="hero-cta">
+      <span>Explorar el proyecto</span>
+      <span>↓</span>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- SECCIÓN 1: CONTEXTUALIZACIÓN -->
+<section id="contexto">
+  <div class="section reveal">
+    <div class="section-header">
+      <div class="section-num">01 —</div>
+      <div>
+        <h2 class="section-title">Contextualización<span>y Justificación Pedagógica</span></h2>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="feature-block">
+      <div>
+        <p><strong>Contexto educativo.</strong> El proyecto se desarrolla en el nivel de Premedia del sistema educativo panameño, específicamente en el área de Geografía e Historia en escuelas públicas de las provincias de Panamá y Coclé, donde se evidencian bajos niveles de motivación y comprensión crítica del territorio nacional y su historia.</p>
+        <p><strong>Necesidades identificadas.</strong> Los estudiantes muestran dificultades para conectar los contenidos curriculares con su realidad cotidiana. La enseñanza tradicionalmente memorística de las ciencias sociales genera desvinculación con el contexto local, latinoamericano y global.</p>
+        <p><strong>Justificación pedagógica.</strong> El proyecto se sustenta en el enfoque constructivista, la teoría del aprendizaje situado y los principios de la pedagogía crítica. Según Vygotsky, el aprendizaje es más efectivo cuando el estudiante participa activamente en contextos significativos; este proyecto convierte el entorno panameño —su historia, geografía y desafíos sociales— en el escenario central del proceso educativo.</p>
+        <p><strong>Marco curricular.</strong> Se articula con los programas del MEDUCA para tercer y cuarto grado de premedia, con estándares de competencias del siglo XXI: comunicación, colaboración, pensamiento crítico y creatividad.</p>
+      </div>
+      <div>
+        <blockquote class="featured">
+          "Enseñar no es transferir conocimiento, sino crear posibilidades para su producción o construcción."
+          <cite>— Paulo Freire, Pedagogía de la Autonomía</cite>
+        </blockquote>
+        <div class="card-grid" style="margin-top:0;">
+          <div class="card" style="grid-column:span 1;">
+            <div class="card-icon">🏫</div>
+            <h3>Nivel educativo</h3>
+            <p>Premedia / 7.° – 9.° grado. Sistema educativo público panameño (MEDUCA).</p>
+          </div>
+          <div class="card" style="grid-column:span 1;">
+            <div class="card-icon">🗺️</div>
+            <h3>Área temática</h3>
+            <p>Geografía e Historia de Panamá integradas con Ciencias Ambientales y Ciencias Sociales.</p>
+          </div>
+          <div class="card" style="grid-column:span 1;">
+            <div class="card-icon">🎯</div>
+            <h3>Objetivo central</h3>
+            <p>Desarrollar pensamiento crítico e identidad nacional a través de metodologías activas y TIC.</p>
+          </div>
+          <div class="card" style="grid-column:span 1;">
+            <div class="card-icon">👥</div>
+            <h3>Población</h3>
+            <p>Estudiantes de 12–15 años en zonas urbanas, rurales e indígenas de Panamá.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN 2: METODOLOGÍAS -->
+<div class="section-alt">
+  <section id="metodologias">
+    <div class="section reveal">
+      <div class="section-header">
+        <div class="section-num">02 —</div>
+        <div>
+          <h2 class="section-title">Metodologías Activas<span>Integradas al Proyecto</span></h2>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="method-list">
+
+        <div class="method-item">
+          <div class="method-tag">ABP</div>
+          <div class="method-content">
+            <h4>Aprendizaje Basado en Proyectos</h4>
+            <p>Los estudiantes diseñan un <strong>"Atlas Digital de Panamá"</strong>: investigan, curan y crean contenido sobre regiones geográficas, eventos históricos y problemáticas actuales. Cada equipo asume un rol —cartógrafos, historiadores, periodistas digitales— y trabaja sobre preguntas guía auténticas como: <em>¿Cómo ha moldeado el Canal la identidad y economía de Panamá?</em> El producto final es un recurso digital colaborativo publicado para la comunidad educativa.</p>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-tag">Gamificación</div>
+          <div class="method-content">
+            <h4>Gamificación del Territorio</h4>
+            <p>Se implementa un sistema de <strong>insignias y misiones geográficas</strong> mediante la plataforma Classcraft/Kahoot. Los estudiantes desbloquean "provincias" al completar retos de investigación y quizzes. Se crean <em>escape rooms virtuales</em> ambientados en eventos históricos clave: la separación de Colombia (1903), la Invasión de 1989, y la reversión del Canal. Los puntos acumulados contribuyen a la calificación formativa.</p>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-tag">Aula Invertida</div>
+          <div class="method-content">
+            <h4>Flipped Classroom con Micro-Documentales</h4>
+            <p>El docente produce <strong>micro-documentales de 5–8 minutos</strong> sobre cada unidad temática y los comparte en YouTube/Google Classroom. En el aula se trabaja en análisis, debate y creación. Esta estrategia libera tiempo presencial para el trabajo colaborativo y la reflexión crítica, garantizando que todos los estudiantes accedan al contenido base, incluyendo aquellos con conectividad limitada mediante materiales offline.</p>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-tag">Estudio de Caso</div>
+          <div class="method-content">
+            <h4>Estudios de Caso Locales y Globales</h4>
+            <p>Se analizan casos concretos de transformación territorial: la construcción del Canal, el impacto ambiental en el Darién, el despoblamiento rural en Veraguas. Cada caso vincula conceptos geográficos (biomas, relieve, cuencas) con procesos históricos y socioeconómicos. Los estudiantes conectan estas problemáticas con fenómenos globales como el cambio climático y la migración.</p>
+          </div>
+        </div>
+
+        <div class="method-item">
+          <div class="method-tag">Aprendizaje Servicio</div>
+          <div class="method-content">
+            <h4>Aprendizaje + Servicio Comunitario</h4>
+            <p>El proyecto culmina con una <strong>exposición digital abierta a la comunidad</strong> donde los estudiantes presentan sus hallazgos sobre problemas geográficos e históricos locales. Este componente articula el aprendizaje académico con el compromiso ciudadano y fortalece habilidades de comunicación pública y sentido de responsabilidad social.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SECCIÓN 3: TIC -->
+<section id="tic">
+  <div class="section reveal">
+    <div class="section-header">
+      <div class="section-num">03 —</div>
+      <div>
+        <h2 class="section-title">Herramientas TIC<span>al Servicio del Aprendizaje</span></h2>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <div class="tic-grid">
+
+      <div class="tic-item">
+        <div class="tic-name">Google Earth / Maps</div>
+        <div class="tic-cat">Cartografía Digital</div>
+        <p class="tic-desc">Exploración inmersiva del territorio panameño: vistas satelitales, capas históricas, medición de distancias y creación de recorridos virtuales por sitios patrimoniales y biomas.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">Google Sites</div>
+        <div class="tic-cat">Publicación Digital</div>
+        <p class="tic-desc">Plataforma central del blog educativo. Cada equipo construye su página del Atlas Digital, integrando mapas, multimedia y reflexiones. Funciona como portafolio digital colectivo.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">Canva Educativo</div>
+        <div class="tic-cat">Diseño Visual</div>
+        <p class="tic-desc">Creación de infografías, líneas de tiempo, mapas conceptuales y presentaciones sobre eventos históricos y regiones geográficas de Panamá, con plantillas accesibles para todos los niveles.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">Kahoot / Quizizz</div>
+        <div class="tic-cat">Gamificación y Evaluación</div>
+        <p class="tic-desc">Cuestionarios interactivos y competencias en tiempo real para reforzar conceptos geográficos e históricos. Datos de resultados informan la retroalimentación formativa del docente.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">Padlet</div>
+        <div class="tic-cat">Colaboración Asíncrona</div>
+        <p class="tic-desc">Murales virtuales colaborativos para lluvia de ideas, recolección de evidencias, comentarios entre pares y construcción colectiva de conocimiento sobre unidades temáticas.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">YouTube / Edpuzzle</div>
+        <div class="tic-cat">Aula Invertida</div>
+        <p class="tic-desc">Los micro-documentales del docente se alojan en YouTube y se procesan en Edpuzzle para insertar preguntas de comprensión. El sistema registra el avance de cada estudiante automáticamente.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">ArcGIS StoryMaps</div>
+        <div class="tic-cat">Narrativa Geográfica</div>
+        <p class="tic-desc">Plataforma para crear narrativas geoespaciales interactivas: combina mapas, textos, fotos y video en un recorrido narrativo. Ideal para proyectos sobre el Camino de Cruces, el Darién o el Canal.</p>
+      </div>
+
+      <div class="tic-item">
+        <div class="tic-name">Google Classroom</div>
+        <div class="tic-cat">Gestión del Aprendizaje</div>
+        <p class="tic-desc">LMS central del proyecto: distribución de tareas, foros de debate, retroalimentación escrita y gestión del portafolio digital de evidencias de aprendizaje de cada estudiante.</p>
+      </div>
+
+    </div>
+
+    <div class="tags" style="margin-top:2rem;">
+      <span class="badge">Accesible offline</span>
+      <span class="badge">Bajo costo</span>
+      <span class="badge">Multiplataforma</span>
+      <span class="badge">BYOD compatible</span>
+      <span class="badge">Privacidad estudiantil</span>
+      <span class="badge">Español nativo</span>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN 4: INTERDISCIPLINAR -->
+<div class="section-alt">
+  <section id="interdisciplinar">
+    <div class="section reveal">
+      <div class="section-header">
+        <div class="section-num">04 —</div>
+        <div>
+          <h2 class="section-title">Enfoque<span>Interdisciplinario</span></h2>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <div class="feature-block">
+        <div>
+          <p><strong>La Geografía y la Historia no son islas.</strong> Este proyecto entiende el territorio y el tiempo como dimensiones entrelazadas que solo se comprenden plenamente al relacionarlas con otros campos del saber. La articulación disciplinar enriquece la comprensión y evita la fragmentación del currículo.</p>
+
+          <div class="arc-row">
+            <div class="arc-subject">Geografía + Historia</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Núcleo central: cómo el espacio geográfico ha condicionado los procesos históricos de Panamá y viceversa.</div>
+          </div>
+          <div class="arc-row">
+            <div class="arc-subject">Ciencias Naturales</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Estudio de biomas, cuencas hidrográficas (Cuenca del Canal) y cambio climático en zonas costeras e indígenas de Panamá.</div>
+          </div>
+          <div class="arc-row">
+            <div class="arc-subject">Español / Literatura</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Producción de textos descriptivos, argumentativos y periodísticos sobre el territorio y la historia. Crónicas históricas y relatos de viajeros.</div>
+          </div>
+          <div class="arc-row">
+            <div class="arc-subject">Matemáticas</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Lectura e interpretación de gráficas estadísticas, escalas cartográficas, porcentajes en datos censales y proyecciones de población.</div>
+          </div>
+          <div class="arc-row">
+            <div class="arc-subject">Arte y Cultura</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Análisis del patrimonio artístico panameño: pollera, mola, tamborito y arquitectura colonial como expresiones del territorio y la historia.</div>
+          </div>
+          <div class="arc-row">
+            <div class="arc-subject">Tecnología / Informática</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Creación digital, manejo de herramientas SIG básicas, edición de video y diseño de infografías como competencias transversales.</div>
+          </div>
+          <div class="arc-row" style="border-bottom:none;">
+            <div class="arc-subject">Educación Cívica</div>
+            <div class="arc-arrow">→</div>
+            <div class="arc-desc">Identidad nacional, soberanía, derechos territoriales de pueblos indígenas y participación ciudadana en la gestión del territorio.</div>
+          </div>
+        </div>
+
+        <div>
+          <blockquote class="featured">
+            "El territorio panameño es en sí mismo un libro de texto: cada provincia, cada etnia, cada río es una lección viva de historia, cultura y geografía."
+            <cite>— Propuesta pedagógica del proyecto</cite>
+          </blockquote>
+          <div class="card-grid" style="margin-top:0;">
+            <div class="card">
+              <div class="card-icon">🌿</div>
+              <h3>Tema integrador: El Canal</h3>
+              <p>El Canal de Panamá como eje articulador: ingeniería (Matemáticas), impacto ambiental (Ciencias), historia de la soberanía (Historia), relaciones internacionales (Cívica) y narrativa literaria (Español).</p>
+            </div>
+            <div class="card">
+              <div class="card-icon">🗽</div>
+              <h3>Pueblos originarios</h3>
+              <p>Territorios comarcales como escenario para integrar geografía física, derechos indígenas, cosmovisiones, biodiversidad y expresiones artísticas en un enfoque de educación intercultural.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- SECCIÓN 5: EVALUACIÓN -->
+<section id="evaluacion">
+  <div class="section reveal">
+    <div class="section-header">
+      <div class="section-num">05 —</div>
+      <div>
+        <h2 class="section-title">Estrategias de Evaluación<span>Alternativas e Innovadoras</span></h2>
+      </div>
+    </div>
+    <div class="divider"></div>
+
+    <p style="color:var(--muted); max-width:700px; margin-bottom:3rem; font-size:0.95rem;">La evaluación en este proyecto supera el modelo tradicional de prueba escrita. Se adopta un enfoque de <strong style="color:var(--cream)">evaluación auténtica y formativa</strong> que valora el proceso, la reflexión y la aplicación del conocimiento en situaciones reales.</p>
+
+    <div class="eval-grid">
+
+      <div class="eval-item">
+        <div class="eval-label">Portafolio Digital</div>
+        <h4>E-Portfolio Reflexivo</h4>
+        <p>Cada estudiante mantiene un portafolio en Google Sites donde documenta su proceso de aprendizaje: borradores, reflexiones semanales, evidencias de investigación y autoevaluaciones. Se valora la evolución del pensamiento, no solo el producto final.</p>
+      </div>
+
+      <div class="eval-item">
+        <div class="eval-label">Rúbricas Co-construidas</div>
+        <h4>Rúbricas Analíticas Colaborativas</h4>
+        <p>Los criterios de evaluación son diseñados junto con los estudiantes al inicio de cada módulo. Esto desarrolla autonomía y metacognición. Las rúbricas evalúan dimensiones como pensamiento geográfico, rigor histórico, creatividad digital y trabajo colaborativo.</p>
+      </div>
+
+      <div class="eval-item">
+        <div class="eval-label">Evaluación entre Pares</div>
+        <h4>Coevaluación Estructurada</h4>
+        <p>Los equipos revisan el trabajo de otros grupos usando protocolos de retroalimentación tipo <em>"dos estrellas y un deseo"</em> y cuestionarios guiados. Desarrolla pensamiento crítico, habilidades comunicativas y responsabilidad colaborativa.</p>
+      </div>
+
+      <div class="eval-item">
+        <div class="eval-label">Proyecto Final</div>
+        <h4>Atlas Digital de Panamá</h4>
+        <p>Producto integrador publicado en Google Sites: cada equipo crea una sección del atlas con mapas, líneas de tiempo, textos propios, infografías y multimedia. Se evalúa con rúbrica holística que incluye rigor, creatividad, pertinencia y presentación oral.</p>
+      </div>
+
+      <div class="eval-item">
+        <div class="eval-label">Observación Sistémica</div>
+        <h4>Diario Docente + Anecdotario</h4>
+        <p>El docente registra observaciones cualitativas sobre participación, argumentación, colaboración y resolución de problemas durante actividades de clase. Estos registros informan la retroalimentación personalizada y ajustes pedagógicos en tiempo real.</p>
+      </div>
+
+      <div class="eval-item">
+        <div class="eval-label">Autoevaluación</div>
+        <h4>Metacognición y Reflexión</h4>
+        <p>Al finalizar cada módulo, los estudiantes completan una encuesta de reflexión: <em>¿Qué aprendí? ¿Cómo lo aprendí? ¿Qué me costó más? ¿Cómo puedo mejorar?</em> Estas reflexiones se incluyen en el portafolio y orientan la planificación docente siguiente.</p>
+      </div>
+
+    </div>
+
+    <blockquote class="featured" style="margin-top:3rem;">
+      "Evaluar no es juzgar; es acompañar el proceso de aprender y ayudar al estudiante a comprender dónde está y hacia dónde puede crecer."
+      <cite>— Principio evaluativo del proyecto</cite>
+    </blockquote>
+  </div>
+</section>
+
+<!-- REFERENCIAS BIBLIOGRÁFICAS -->
+<div class="section-alt">
+  <section id="referencias">
+    <div class="section reveal">
+      <div class="section-header">
+        <div class="section-num">06 —</div>
+        <div>
+          <h2 class="section-title">Referencias<span>Bibliográficas</span></h2>
+        </div>
+      </div>
+      <div class="divider"></div>
+
+      <p style="color:var(--muted);font-size:0.88rem;margin-bottom:2.5rem;">Las siguientes referencias fundamentan el diseño pedagógico, metodológico y tecnológico de este proyecto educativo innovador, siguiendo el formato APA 7.ª edición.</p>
+
+      <div style="display:flex;flex-direction:column;gap:1px;background:var(--border);border:1px solid var(--border);">
+
+        <!-- REF 1 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[01]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Ausubel, D. P. (2002). <em style="color:var(--cream);">Adquisición y retención del conocimiento: Una perspectiva cognitiva.</em> Paidós Ibérica.</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Aprendizaje significativo</span><span class="badge">Constructivismo</span></div>
+          </div>
+        </div>
+
+        <!-- REF 2 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[02]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Bergmann, J., & Sams, A. (2012). <em style="color:var(--cream);">Flip your classroom: Reach every student in every class every day.</em> International Society for Technology in Education (ISTE).</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Aula invertida</span><span class="badge">TIC</span></div>
+          </div>
+        </div>
+
+        <!-- REF 3 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[03]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Deterding, S., Dixon, D., Khaled, R., & Nacke, L. (2011). From game design elements to gamefulness: Defining gamification. <em style="color:var(--cream);">Proceedings of the 15th International Academic MindTrek Conference,</em> 9–15. https://doi.org/10.1145/2181037.2181040</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Gamificación</span><span class="badge">Diseño educativo</span></div>
+          </div>
+        </div>
+
+        <!-- REF 4 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[04]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Freire, P. (2004). <em style="color:var(--cream);">Pedagogía de la autonomía: Saberes necesarios para la práctica educativa</em> (4.ª ed.). Paz e Terra.</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Pedagogía crítica</span><span class="badge">Autonomía</span></div>
+          </div>
+        </div>
+
+        <!-- REF 5 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[05]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Hernández Sampieri, R., Fernández Collado, C., & Baptista Lucio, P. (2014). <em style="color:var(--cream);">Metodología de la investigación</em> (6.ª ed.). McGraw-Hill Education.</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Investigación educativa</span><span class="badge">Metodología</span></div>
+          </div>
+        </div>
+
+        <!-- REF 6 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[06]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">International Society for Technology in Education. (2023). <em style="color:var(--cream);">ISTE Standards for Educators.</em> ISTE. https://www.iste.org/standards/iste-standards-for-educators</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Estándares TIC</span><span class="badge">Competencias docentes</span></div>
+          </div>
+        </div>
+
+        <!-- REF 7 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[07]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Ministerio de Educación de Panamá. (2019). <em style="color:var(--cream);">Programas de estudio de Ciencias Sociales: Geografía e Historia de Panamá, nivel de Premedia.</em> MEDUCA.</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Currículo panameño</span><span class="badge">MEDUCA</span></div>
+          </div>
+        </div>
+
+        <!-- REF 8 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[08]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Morales, O. A., & Dubs, R. (2001). Las estrategias didácticas en los procesos de enseñanza y aprendizaje. <em style="color:var(--cream);">Educere, 5</em>(16), 427–433.</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Didáctica</span><span class="badge">Estrategias activas</span></div>
+          </div>
+        </div>
+
+        <!-- REF 9 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[09]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Perrenoud, P. (2004). <em style="color:var(--cream);">Diez nuevas competencias para enseñar.</em> Graó.</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Competencias docentes</span><span class="badge">Formación</span></div>
+          </div>
+        </div>
+
+        <!-- REF 10 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[10]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Thomas, J. W. (2000). <em style="color:var(--cream);">A review of research on project-based learning.</em> The Autodesk Foundation. http://www.bobpearlman.org/BestPractices/PBL_Research.pdf</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Aprendizaje por proyectos</span><span class="badge">Investigación ABP</span></div>
+          </div>
+        </div>
+
+        <!-- REF 11 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[11]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">UNESCO. (2022). <em style="color:var(--cream);">Reimaginar juntos nuestros futuros: Un nuevo contrato social para la educación.</em> UNESCO Publishing. https://doi.org/10.54675/ASUN9832</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Educación del futuro</span><span class="badge">UNESCO</span></div>
+          </div>
+        </div>
+
+        <!-- REF 12 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[12]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Vygotsky, L. S. (1995). <em style="color:var(--cream);">Pensamiento y lenguaje.</em> Paidós. (Obra original publicada en 1934)</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Zona de desarrollo próximo</span><span class="badge">Aprendizaje social</span></div>
+          </div>
+        </div>
+
+        <!-- REF 13 -->
+        <div style="background:var(--bg2);padding:2rem 2.5rem;display:grid;grid-template-columns:auto 1fr;gap:1.5rem;align-items:start;transition:background 0.3s;" onmouseover="this.style.background='var(--bg3)'" onmouseout="this.style.background='var(--bg2)'">
+          <div style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--gold);letter-spacing:0.15em;min-width:30px;margin-top:0.2rem;">[13]</div>
+          <div>
+            <p style="color:var(--text);font-size:0.9rem;line-height:1.7;">Wiggins, G., & McTighe, J. (2005). <em style="color:var(--cream);">Understanding by design</em> (2.ª ed.). Association for Supervision and Curriculum Development (ASCD).</p>
+            <div style="margin-top:0.5rem;"><span class="badge">Diseño curricular</span><span class="badge">Evaluación auténtica</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <p style="color:var(--muted);font-size:0.78rem;margin-top:1.5rem;font-family:'DM Mono',monospace;letter-spacing:0.05em;">* Todas las referencias siguen el formato APA 7.ª edición (American Psychological Association, 2020).</p>
+
+    </div>
+  </section>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">GeoHistoria Panamá</div>
+  <div class="footer-info">
+    Blog Educativo Digital · Proyecto Pedagógico Innovador<br>
+    Geografía e Historia · Sistema Educativo Panameño<br>
+    © 2025 — Todos los derechos reservados
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
